@@ -33,64 +33,87 @@ class Employee{
     }
 }
 
-let emp = new Employee();
-
 //UC8   
 const salary = document.querySelector('#salary');
 const output = document.querySelector('.salary-output');
 output.textContent = salary.value;
 salary.addEventListener('input',function() {
     output.textContent = salary.value;
-    emp.salary = salary.value;
 });
 
-const empName = document.querySelector('#name');
-const nameError = document.querySelector('.name-error');
-empName.addEventListener('input',function() {
-let nameRegex = RegExp('^[A-Z]{1}[a-z]{2,}$');
-if(nameRegex.test(empName.value)){
-    nameError.textContent = "";
-    emp.empName = empName.value;
-}
-else{
-    nameError.textContent = "Name is incorrect";
-}
-});
+function validateName(empObj){
+    const empName = document.querySelector('#name');
+    const nameError = document.querySelector('.name-error');
+    let nameRegex = RegExp('^[A-Z]{1}[a-z]{2,}$');
+    if(nameRegex.test(empName.value)){
+        nameError.textContent = "";
+        empObj.empName = empName.value;
+    }
+    else{
+        throw "Name is incorrect";
+    }
 
-function validateDate(){
+}
+
+function validateDate(empObj){
     let startDate = document.querySelector('#year').value+'-'+document.querySelector('#month').value+'-'+document.querySelector('#day').value;
     let today = new Date();
     let givenDate = new Date(startDate+" 0:00:00");
 
     if(givenDate > today){
-        console.log('Invalid date');
+        throw 'Invalid date';
     }else{
-        emp.startDate = startDate;
+        empObj.startDate = startDate;
     }
 }
 
+function saveData(empObj){
+    let empPayrollList = JSON.parse(localStorage.getItem("EmpPayrollList"));
+    if(empPayrollList != null){
+        empPayrollList.push(empObj);
+    }
+    else{
+        empPayrollList = [empObj];
+    }
+    console.log(empPayrollList);
+    localStorage.setItem("EmpPayrollList", JSON.stringify(empPayrollList));
+    alert("Submitted Successfully !");
+}
+
 function onSubmit(){
-    const profileImg = document.querySelector("input[name='profile']:checked");
-    emp.profileImg = profileImg.value;
+    try{
 
-    const gender = document.querySelector("input[name='gender']:checked");
-    emp.gender = gender.value;
+        let empObj = new Employee();
 
-    const dept = document.querySelectorAll("input[type='checkbox']:checked");
-    let departments = '';
-    for (let i = 0; i < dept.length; i++) {   
-        departments += dept[i].value+ ',';
-    }   
-    emp.dept = departments;
+        validateName(empObj);
 
-    const notes = document.querySelector('#notes');
-    emp.notes = notes.value;
-    
-    validateDate();
+        const profileImg = document.querySelector("input[name='profile']:checked");
+        empObj.profileImg = profileImg.value;
 
-    emp.salary = salary.value;
-    
-    console.log(emp);
+        const gender = document.querySelector("input[name='gender']:checked");
+        empObj.gender = gender.value;
+
+        const dept = document.querySelectorAll("input[type='checkbox']:checked");
+        let departments = '';
+        for (let i = 0; i < dept.length; i++) {   
+            departments += dept[i].value+ ',';
+        }   
+        empObj.dept = departments;
+
+        const notes = document.querySelector('#notes');
+        empObj.notes = notes.value;
+
+        validateDate(empObj);
+
+        empObj.salary = salary.value;
+
+        saveData(empObj);
+
+    }catch(e){
+        alert(e);
+        console.log(e);
+    }
     return false;
 }
 
+ 
