@@ -19,7 +19,7 @@
         </div>
     </header>
     <div class="form-content">
-        <form class="form" action="#" onsubmit="return onSubmit()">
+        <form class="form" id="payrollForm" action="#" onsubmit="return onSubmit()">
 <!-- UC2 -->    
             <div class="form-head">Employee Payroll Form</div>
             <div class="row-content">
@@ -159,7 +159,7 @@
                 <a href="#" class="resetButton button cancelButton">Cancel</a>
                 <div class="submit-reset">
                     <button type="submit" class="button submitButton" id="submitButton" >Submit</button>
-                    <button type="reset" class="resetButton button">Reset</button>
+                    <button type="reset" class="resetButton button" onClick="formReset()">Reset</button>
                 </div>
             </div>
         </form>

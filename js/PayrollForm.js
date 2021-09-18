@@ -80,6 +80,10 @@ function saveData(empObj){
     alert("Submitted Successfully !");
 }
 
+function formReset() {
+    document.getElementById("payrollForm").reset();
+}
+
 function onSubmit(){
     try{
 
@@ -108,6 +112,7 @@ function onSubmit(){
         empObj.salary = salary.value;
 
         saveData(empObj);
+        formReset();
 
     }catch(e){
         alert(e);
